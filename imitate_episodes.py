@@ -9,7 +9,7 @@ from tqdm import tqdm
 from einops import rearrange
 
 from constants import DT
-from constants import PUPPET_GRIPPER_JOINT_OPEN
+from constants import PUPPET_GRIPPER_JOINT_OPEN, NUM_JOINTS
 from utils import load_data # data functions
 from utils import sample_box_pose, sample_insertion_pose # robot functions
 from utils import compute_dict_mean, set_seed, detach_dict # helper functions
@@ -47,7 +47,7 @@ def main(args):
     camera_names = task_config['camera_names']
 
     # fixed parameters
-    state_dim = 14
+    state_dim = NUM_JOINTS
     lr_backbone = 1e-5
     backbone = 'resnet18'
     if policy_class == 'ACT':
@@ -65,6 +65,7 @@ def main(args):
                          'dec_layers': dec_layers,
                          'nheads': nheads,
                          'camera_names': camera_names,
+                         'state_dim': state_dim
                          }
     elif policy_class == 'CNNMLP':
         policy_config = {'lr': args['lr'], 'lr_backbone': lr_backbone, 'backbone' : backbone, 'num_queries': 1,
